@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: docker.io/rabbitmq:3.9-management-alpine
+    ports:
+      - 5672:5672
+      - 15672:15672
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbitmq
+      RABBITMQ_DEFAULT_PASS: rabbitmq
+
+  collector:
+    image: ghcr.io/baez90/windpark-challenge:latest
+    command:
+      - collect
+      - --publishing-uri=amqp://rabbitmq:rabbitmq@rabbitmq
+      - --bucket-size=30s

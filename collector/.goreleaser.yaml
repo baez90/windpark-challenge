@@ -1,0 +1,32 @@
+builds:
+  - id: "wp"
+    binary: wp
+    main: ./
+    flags:
+      - -trimpath
+    ldflags:
+      - -w -s
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+
+archives: []
+
+dockers:
+  - ids:
+      - wp
+    image_templates:
+      - ghcr.io/baez90/windpark-challenge:latest
+      - ghcr.io/baez90/windpark-challenge:{{ .Tag }}
+      - ghcr.io/baez90/windpark-challenge:{{ .Major }}
+      - ghcr.io/baez90/windpark-challenge:{{ .ShortCommit}}
+
+    dockerfile: build/docker/collector.dockerfile
+    build_flag_templates:
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
